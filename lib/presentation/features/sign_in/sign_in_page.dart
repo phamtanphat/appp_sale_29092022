@@ -1,4 +1,6 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
+import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
+import 'package:appp_sale_29092022/data/repositories/authentication_repository.dart';
 import 'package:flutter/material.dart';
 class SignInPage extends StatefulWidget {
   @override
@@ -29,6 +31,15 @@ class _SignInContainer extends StatefulWidget {
 
 class _SignInContainerState extends State<_SignInContainer> {
 
+  @override
+  void didUpdateWidget(covariant _SignInContainer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    ApiRequest apiRequest = ApiRequest();
+    AuthenticationRepository repository = AuthenticationRepository();
+    repository.updateApiRequest(apiRequest);
+    repository.signIn("demo1@gmal.com", "12345678");
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Container(
