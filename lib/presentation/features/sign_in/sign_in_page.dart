@@ -1,7 +1,10 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
 import 'package:appp_sale_29092022/data/repositories/authentication_repository.dart';
+import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_bloc.dart';
+import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_event.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 class SignInPage extends StatefulWidget {
   @override
   State<SignInPage> createState() => _SignInPageState();
@@ -15,7 +18,21 @@ class _SignInPageState extends State<SignInPage> {
         title: const Text("Sign In"),
       ),
       providers: [
-
+        Provider(create: (context) => ApiRequest()),
+        ProxyProvider<ApiRequest, AuthenticationRepository>(
+          create: (context) => AuthenticationRepository(),
+          update: (context, request, repository) {
+            repository?.updateApiRequest(request);
+            return repository!;
+          },
+        ),
+        ProxyProvider<AuthenticationRepository, SignInBloc>(
+          create: (context) => SignInBloc(),
+          update: (context, repository, bloc) {
+            bloc?.updateAuthenRepo(repository);
+            return bloc!;
+          },
+        )
       ],
       child: _SignInContainer(),
     );
@@ -31,15 +48,17 @@ class _SignInContainer extends StatefulWidget {
 
 class _SignInContainerState extends State<_SignInContainer> {
 
+  late SignInBloc bloc;
+
   @override
-  void didUpdateWidget(covariant _SignInContainer oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    ApiRequest apiRequest = ApiRequest();
-    AuthenticationRepository repository = AuthenticationRepository();
-    repository.updateApiRequest(apiRequest);
-    repository.signIn("demo1@gmail.com", "12345678");
+  void initState() {
+    super.initState();
+    bloc = context.read();
+    bloc.eventSink.add(SignInEvent(
+            email: 'demo1@gmail.com',
+            password: '12345678'));
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
