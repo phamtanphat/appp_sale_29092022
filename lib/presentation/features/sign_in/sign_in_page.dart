@@ -37,7 +37,7 @@ class _SignInContainerState extends State<_SignInContainer> {
     ApiRequest apiRequest = ApiRequest();
     AuthenticationRepository repository = AuthenticationRepository();
     repository.updateApiRequest(apiRequest);
-    repository.signIn("demo1@gmal.com", "12345678");
+    repository.signIn("demo1@gmail.com", "12345678");
   }
   
   @override

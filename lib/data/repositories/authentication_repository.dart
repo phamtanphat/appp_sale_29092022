@@ -15,14 +15,14 @@ class AuthenticationRepository {
   Future<AppResource<UserDTO>> signIn(String email, String password) async{
     Completer<AppResource<UserDTO>> completer = Completer();
     try {
-      var response =  await _apiRequest.signInRequest(email, password);
-      print(response);
+      Response<dynamic> response =  await _apiRequest.signInRequest(email, password);
+      AppResource<UserDTO> resourceUserDTO = AppResource.fromJson(response.data, UserDTO.fromJson);
+      completer.complete(resourceUserDTO);
     } on DioError catch (dioError) {
-      print(dioError.response?.data["message"]);
+      completer.completeError(dioError.response?.data["message"]);
     } catch(e) {
-
+      completer.completeError(e.toString());
     }
-
     return completer.future;
   }
 }
