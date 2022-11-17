@@ -10,9 +10,6 @@ import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_event.d
 
 class SignInBloc extends BaseBloc {
   late AuthenticationRepository _repository;
-  StreamController<User> _userController = StreamController();
-
-  Stream<User> get user => _userController.stream;
 
   void updateAuthenRepo(AuthenticationRepository authenticationRepository) {
     _repository = authenticationRepository;
@@ -28,21 +25,23 @@ class SignInBloc extends BaseBloc {
   }
 
   void handleSignIn(SignInEvent event) async {
+    loadingSink.add(true);
     try {
       AppResource<UserDTO> resourceUserDTO =
           await _repository.signIn(event.email, event.password);
       if (resourceUserDTO.data == null) return;
       UserDTO userDTO = resourceUserDTO.data!;
       User user = User(userDTO.email, userDTO.name, userDTO.phone, userDTO.token);
-      _userController.sink.add(user);
+      progressSink.add(SignInSuccessEvent());
+      loadingSink.add(false);
     } catch (e) {
-      _userController.sink.addError(e.toString());
+      progressSink.add(SignInFailEvent(message: e.toString()));
+      loadingSink.add(false);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    _userController.close();
   }
 }
