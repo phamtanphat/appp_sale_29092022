@@ -70,47 +70,50 @@ class _SignInContainerState extends State<_SignInContainer> {
       child: SafeArea(
         child: Stack(
           children: [
-            LoadingWidget(
-              bloc: bloc,
-              child: Column(
-                children: [
-                  Expanded(
-                      flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
-                  Expanded(
-                    flex: 4,
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildEmailTextField(emailController),
-                          _buildPasswordTextField(passwordController),
-                          _buildButtonSignIn(onPress: () {
-                              String email = emailController.text.toString();
-                              String password = passwordController.text.toString();
+            Column(
+              children: [
+                Expanded(
+                    flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildEmailTextField(emailController),
+                        _buildPasswordTextField(passwordController),
+                        _buildButtonSignIn(onPress: () {
+                          String email = emailController.text.toString();
+                          String password = passwordController.text.toString();
 
-                              if (email.isEmpty || password.isEmpty) {
-                                showMessage(
-                                    context,
-                                    "Message",
-                                    "Input is not empty",
-                                    [
-                                      TextButton(onPressed: () {
-                                        Navigator.pop(context);
-                                      }, child: Text("ok"))
-                                    ]
-                                );
-                                return;
-                              }
+                          if (email.isEmpty || password.isEmpty) {
+                            showMessage(
+                                context,
+                                "Message",
+                                "Input is not empty",
+                                [
+                                  TextButton(onPressed: () {
+                                    Navigator.pop(context);
+                                  }, child: Text("ok"))
+                                ]
+                            );
+                            return;
+                          }
 
-                              bloc.eventSink.add(SignInEvent(email: email, password: password));
-                          })
-                        ],
-                      ),
+                          bloc.eventSink.add(SignInEvent(email: email, password: password));
+                        })
+                      ],
                     ),
                   ),
-                  Expanded(child: _buildTextSignUp())
-                ],
-              ),
+                ),
+                Expanded(child: _buildTextSignUp(function: () {
+                  Navigator.pushNamed(context, "sign-up");
+                }))
+              ],
+            ),
+            LoadingWidget(
+              bloc: bloc,
+              child: Container(),
             ),
             ProgressListenerWidget<SignInBloc>(
               child: Container(),
@@ -133,7 +136,7 @@ class _SignInContainerState extends State<_SignInContainer> {
     );
   }
 
-  Widget _buildTextSignUp() {
+  Widget _buildTextSignUp({Function()? function}) {
     return Container(
         margin: EdgeInsets.only(left: 10, right: 10),
         child: Row(
@@ -142,9 +145,7 @@ class _SignInContainerState extends State<_SignInContainer> {
           children: [
             Text("Don't have an account!"),
             InkWell(
-              onTap: () async{
-
-              },
+              onTap: function,
               child: Text("Sign Up",
                   style: TextStyle(
                       color: Colors.red, decoration: TextDecoration.underline)),

@@ -1,4 +1,5 @@
 import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_page.dart';
+import 'package:appp_sale_29092022/presentation/features/sign_up/sign_up_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +15,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(),
       routes: {
-        "sign-in": (context) => SignInPage()
+        "sign-in": (context) => SignInPage(),
+        "sign-up": (context) => SignUpPage(),
       },
       initialRoute: "sign-in",
     );
