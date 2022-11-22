@@ -110,8 +110,10 @@ class _SignInContainerState extends State<_SignInContainer> {
                   Navigator
                       .pushNamed(context, "sign-up")
                       .then((value){
-                         print(value);
-                         print(value.runtimeType);
+                        if (value != null) {
+                          emailController.text = (value as List)[0];
+                          passwordController.text = (value as List)[1];
+                        }
                       })
                       .catchError((error) {
                          print(error);
