@@ -107,7 +107,15 @@ class _SignInContainerState extends State<_SignInContainer> {
                   ),
                 ),
                 Expanded(child: _buildTextSignUp(function: () {
-                  Navigator.pushNamed(context, "sign-up");
+                  Navigator
+                      .pushNamed(context, "sign-up")
+                      .then((value){
+                         print(value);
+                         print(value.runtimeType);
+                      })
+                      .catchError((error) {
+                         print(error);
+                      });
                 }))
               ],
             ),

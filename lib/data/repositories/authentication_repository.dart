@@ -26,4 +26,29 @@ class AuthenticationRepository {
     }
     return completer.future;
   }
+
+  Future<AppResource<UserDTO>> signUp(
+      String email,
+      String password,
+      String phone,
+      String name,
+      String address
+  ) async{
+    Completer<AppResource<UserDTO>> completer = Completer();
+    try {
+      // Response
+      Response<dynamic> response =
+        await _apiRequest.signUpRequest(name, email, phone, password, address);
+
+      // Parse JSON
+      AppResource<UserDTO> resourceUserDTO =
+        AppResource.fromJson(response.data, UserDTO.fromJson);
+      completer.complete(resourceUserDTO);
+    } on DioError catch (dioError) {
+      completer.completeError(dioError.response?.data["message"]);
+    } catch(e) {
+      completer.completeError(e.toString());
+    }
+    return completer.future;
+  }
 }

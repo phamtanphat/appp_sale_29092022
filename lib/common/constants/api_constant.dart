@@ -3,4 +3,5 @@ class ApiConstant {
 
   // End Point
   static final String SIGN_IN = "user/sign-in";
+  static final String SIGN_UP = "user/sign-up";
 }

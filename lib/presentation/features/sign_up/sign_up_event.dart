@@ -12,6 +12,29 @@ class SignUpEvent extends BaseEvent {
   });
 
   @override
-  List<Object?> get props => [name, address, email, phone, password];
+  List<Object?> get props => [];
+
+}
+
+class SignUpSuccessEvent extends BaseEvent {
+  late String email, password;
+
+  SignUpSuccessEvent({
+    required this.email,
+    required this.password,
+  });
+
+  @override
+  List<Object?> get props => [];
+
+}
+
+class SignUpFailEvent extends BaseEvent {
+  String message;
+
+  SignUpFailEvent({required this.message});
+
+  @override
+  List<Object?> get props => [];
 
 }

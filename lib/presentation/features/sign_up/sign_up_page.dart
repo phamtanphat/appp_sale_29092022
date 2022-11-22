@@ -1,5 +1,13 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
+import 'package:appp_sale_29092022/common/utils/extension.dart';
+import 'package:appp_sale_29092022/common/widgets/loading_widget.dart';
+import 'package:appp_sale_29092022/common/widgets/progress_listener_widget.dart';
+import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
+import 'package:appp_sale_29092022/data/repositories/authentication_repository.dart';
+import 'package:appp_sale_29092022/presentation/features/sign_up/sign_up_bloc.dart';
+import 'package:appp_sale_29092022/presentation/features/sign_up/sign_up_event.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 class SignUpPage extends StatefulWidget {
 
   @override
@@ -14,7 +22,21 @@ class _SignUpPageState extends State<SignUpPage> {
         title: const Text("Sign Up"),
       ),
       providers: [
-
+        Provider(create: (context) => ApiRequest()),
+        ProxyProvider<ApiRequest, AuthenticationRepository>(
+          create: (context) => AuthenticationRepository(),
+          update: (context, request, repository) {
+            repository?.updateApiRequest(request);
+            return repository!;
+          },
+        ),
+        ProxyProvider<AuthenticationRepository, SignUpBloc>(
+          create: (context) => SignUpBloc(),
+          update: (context, repository, bloc) {
+            bloc?.updateAuthenRepo(repository);
+            return bloc!;
+          },
+        )
       ],
       child: SignUpContainer(),
     );
@@ -30,15 +52,48 @@ class SignUpContainer extends StatefulWidget {
 
 class _SignUpContainerState extends State<SignUpContainer> {
   late TextEditingController emailController, phoneController, passwordController, addressController, nameController;
+  late SignUpBloc bloc;
 
   @override
   void initState() {
     super.initState();
+    bloc = context.read();
     emailController = TextEditingController();
     nameController = TextEditingController();
     passwordController = TextEditingController();
     addressController = TextEditingController();
     phoneController = TextEditingController();
+  }
+
+  void clearTextEdit() {
+    emailController.clear();
+    passwordController.clear();
+    nameController.clear();
+    addressController.clear();
+    phoneController.clear();
+  }
+  
+  void signUp() {
+    String email = emailController.text.toString();
+    String password = passwordController.text.toString();
+    String name = nameController.text.toString();
+    String phone = phoneController.text.toString();
+    String address = addressController.text.toString();
+    
+    if (isNotEmpty([email, password, name, phone, address])) {
+      bloc.eventSink.add(SignUpEvent(name: name, address: address, email: email, phone: phone, password: password));
+    } else {
+      showMessage(
+          context,
+          "Message",
+          "Input is not empty",
+          [
+            TextButton(onPressed: () {
+              Navigator.pop(context);
+            }, child: Text("ok"))
+          ]
+      );
+    }
   }
 
   @override
@@ -57,26 +112,41 @@ class _SignUpContainerState extends State<SignUpContainer> {
                     child: ConstrainedBox(
                       constraints:
                       BoxConstraints(minHeight: constraint.maxHeight),
-                      child: IntrinsicHeight(
-                        child: Stack(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _buildNameTextField(nameController),
-                                SizedBox(height: 10),
-                                _buildAddressTextField(addressController),
-                                SizedBox(height: 10),
-                                _buildEmailTextField(emailController),
-                                SizedBox(height: 10),
-                                _buildPhoneTextField(phoneController),
-                                SizedBox(height: 10),
-                                _buildPasswordTextField(passwordController),
-                                SizedBox(height: 10),
-                                _buildButtonSignUp()
-                              ],
-                            ),
-                          ],
+                      child: LoadingWidget(
+                        bloc: bloc,
+                        child: IntrinsicHeight(
+                          child: Stack(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _buildNameTextField(nameController),
+                                  SizedBox(height: 10),
+                                  _buildAddressTextField(addressController),
+                                  SizedBox(height: 10),
+                                  _buildEmailTextField(emailController),
+                                  SizedBox(height: 10),
+                                  _buildPhoneTextField(phoneController),
+                                  SizedBox(height: 10),
+                                  _buildPasswordTextField(passwordController),
+                                  SizedBox(height: 10),
+                                  _buildButtonSignUp(function: signUp)
+                                ],
+                              ),
+                              ProgressListenerWidget<SignUpBloc>(
+                                child: Container(),
+                                callback: (event) {
+                                  if (event is SignUpSuccessEvent) {
+                                    showSnackBar(context, "Đăng ký thành công");
+                                    clearTextEdit();
+                                    Future.delayed(Duration(seconds: 1), () {
+                                      Navigator.pop(context, [event.email, event.password]);
+                                    });
+                                  }
+                                },
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
