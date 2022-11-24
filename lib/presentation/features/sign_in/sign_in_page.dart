@@ -133,6 +133,7 @@ class _SignInContainerState extends State<_SignInContainer> {
                     showSnackBar(context, "Đăng nhập thành công");
                     emailController.clear();
                     passwordController.clear();
+                    Navigator.pushReplacementNamed(context, "home");
                     break;
                   case SignInFailEvent:
                     showSnackBar(context, (event as SignInFailEvent).message);

@@ -1,3 +1,5 @@
+import 'package:appp_sale_29092022/data/datasources/local/cache/app_cache.dart';
+import 'package:appp_sale_29092022/presentation/features/home/home_page.dart';
 import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_page.dart';
 import 'package:appp_sale_29092022/presentation/features/sign_up/sign_up_page.dart';
 import 'package:appp_sale_29092022/presentation/features/splash/splash_page.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
+  AppCache.init();
 }
 
 class MyApp extends StatelessWidget {
@@ -19,6 +22,7 @@ class MyApp extends StatelessWidget {
         "sign-in": (context) => SignInPage(),
         "sign-up": (context) => SignUpPage(),
         "splash": (context) => SplashPage(),
+        "home": (context) => HomePage(),
       },
       initialRoute: "splash",
     );
