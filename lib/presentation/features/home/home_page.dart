@@ -60,7 +60,10 @@ class _HomeContainerState extends State<HomeContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
+    return Stack(
+        alignment: Alignment.center,
+        children: [
+
       StreamBuilder<List<Product>>(
           initialData: [],
           stream: bloc.products,
@@ -77,7 +80,12 @@ class _HomeContainerState extends State<HomeContainer> {
               return Container();
             }
           }),
-      LoadingWidget(child: Container(), bloc: bloc)
+      LoadingWidget(child: Container(), bloc: bloc),
+          ElevatedButton(
+              onPressed: () {
+                showMessage(context, "Thông báo", "Click me");
+              },
+              child: Text("Click me")),
     ]);
   }
 
