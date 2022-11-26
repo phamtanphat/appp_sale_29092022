@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:appp_sale_29092022/common/bases/base_bloc.dart';
 import 'package:appp_sale_29092022/common/bases/base_event.dart';
 import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
 import 'package:appp_sale_29092022/data/datasources/local/cache/app_cache.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/dto/app_resource.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/dto/user_dto.dart';
-import 'package:appp_sale_29092022/data/model/user.dart';
 import 'package:appp_sale_29092022/data/repositories/authentication_repository.dart';
 import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_event.dart';
 

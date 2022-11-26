@@ -31,4 +31,8 @@ class ApiRequest {
       "password": password
     });
   }
+
+  Future getProducts() {
+    return _dio.get(ApiConstant.PRODUCTS);
+  }
 }
