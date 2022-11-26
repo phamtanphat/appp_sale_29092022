@@ -10,7 +10,7 @@ import 'package:appp_sale_29092022/presentation/features/home/home_event.dart';
 
 class HomeBloc extends BaseBloc {
   StreamController<List<Product>> _listProductsController = StreamController();
-  Stream get products => _listProductsController.stream;
+  Stream<List<Product>> get products => _listProductsController.stream;
 
   late ProductRepository _productRepository;
 

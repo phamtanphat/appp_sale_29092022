@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/single_child_widget.dart';
 
 void showMessage(
@@ -32,4 +33,8 @@ bool isNotEmpty(List<String> data) {
     }
   }
   return true;
+}
+
+String formatPrice(int price) {
+  return NumberFormat("#,###", "en_US").format(price);
 }
