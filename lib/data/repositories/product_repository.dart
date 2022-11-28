@@ -1,31 +1,32 @@
 import 'dart:async';
+import 'dart:convert';
 
-import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/app_resource.dart';
-import 'package:appp_sale_29092022/data/datasources/remote/dto/product_dto.dart';
+
+import 'package:appp_sale_29092022/data/model/result.dart';
 import 'package:dio/dio.dart';
 
 class ProductRepository {
-  late ApiRequest _apiRequest;
+  Dio _dio = Dio();
 
-  void updateApiRequest(ApiRequest apiRequest) {
-    _apiRequest = apiRequest;
-  }
 
-  Future<AppResource<List<ProductDTO>>> getProducts() async{
-    Completer<AppResource<List<ProductDTO>>> completer = Completer();
+  Future<List<Data>> getProducts() async{
+    String apiUrl ="https://serverappsale.herokuapp.com/product";
     try {
-      Response<dynamic> response =  await _apiRequest.getProducts();
+      Response response =  await _dio.get(apiUrl);
       // TODO: Improve use Isolate
-      AppResource<List<ProductDTO>> resourceProductDTO = AppResource.fromJson(response.data, (listData){
-        return (listData as List).map((e) => ProductDTO.fromJson(e)).toList();
-      });
-      completer.complete(resourceProductDTO);
+      ProductResult products = ProductResult.fromJson(response.data);
+      List<Data>? data = products.data;
+
+      print(products);
+
+      return data ?? [];
+
     } on DioError catch (dioError) {
-      completer.completeError(dioError.response?.data["message"]);
+      return [];
     } catch(e) {
-      completer.completeError(e.toString());
+      return [];
     }
-    return completer.future;
+
+
   }
 }
