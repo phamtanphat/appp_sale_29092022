@@ -1,6 +1,7 @@
 
 import 'package:appp_sale_29092022/common/constants/api_constant.dart';
 import 'package:appp_sale_29092022/common/utils/extension.dart';
+import 'package:appp_sale_29092022/data/model/cart_result_model.dart';
 import 'package:appp_sale_29092022/data/model/result.dart';
 import 'package:appp_sale_29092022/presentation/features/home/home_bloc.dart';
 import 'package:appp_sale_29092022/presentation/features/home/home_event.dart';
@@ -34,23 +35,43 @@ class _HomeContainerState extends State<HomeContainer> {
     // TODO: implement initState
     super.initState();
     bloc.dispatch(FetchProductEvent());
+    bloc.dispatch(LoadCartOnAppbar());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-            child: const Text("Home page", style: TextStyle(color: Colors.black),)
+        title: const Center(
+            child: Text("Home page", style: TextStyle(color: Colors.black),)
         ),
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(
-            Icons.shopping_cart,
-            color: Colors.orange,
-          )),
-          Text(
-            "0",
-            style: TextStyle(color: Colors.black),
+          Stack(
+            children: [
+              IconButton(
+                  onPressed: (){},
+                  icon: const Icon(Icons.shopping_cart, color: Colors.orange,),
+              ),
+              Positioned(
+                right: 30,
+                  top: 10,
+                  child: StreamBuilder<int>(
+                  stream: bloc.getCartStream,
+                  builder: (context, snapshot) {
+                    switch(snapshot.connectionState){
+                      case ConnectionState.waiting:
+                        return const Text("");
+                      case ConnectionState.active:
+                        return Text((snapshot.data).toString(),
+                            style: TextStyle( color: Colors.white,
+                              backgroundColor: Colors.black,
+                            ));
+                      default:
+                        return const Text("");
+                    }
+                  },)
+              )
+            ],
           )
         ],
         backgroundColor: Colors.white,
@@ -58,16 +79,45 @@ class _HomeContainerState extends State<HomeContainer> {
       body: SafeArea(
         child: Stack(
           children: [
-            StreamBuilder<dynamic>(
+            StreamBuilder<List<Data>>(
               stream: bloc.getStream,
                 builder: (context,snapshot) {
-                  return ListView.builder(
-                      itemCount: snapshot.data?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        return _buildItemFood(snapshot.data?[index]);
-                      });
+                  switch(snapshot.connectionState){
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    case ConnectionState.active:
+                      return ListView.builder(
+                          itemCount: snapshot.data?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return _buildItemFood(snapshot.data?[index]);
+                          });
+                    default:
+                      return Container();
+                  }
                 }
-            )
+            ),
+            StreamBuilder<String>(
+              stream: bloc.getStatusAddToCart,
+              builder: (context, snapshot) {
+
+                if(snapshot.hasData){
+                  switch(snapshot.data){
+                    case "adding":
+                      return const Positioned.fill(child: Center(
+                        child: CircularProgressIndicator(color: Colors.orange),
+                      ));
+                    case "success":
+                      return Container();
+                    default:
+                      return Container();
+                  }
+                }
+                else{
+                  return Container();
+                }
+            },)
           ],
         ),
       )
@@ -107,7 +157,9 @@ class _HomeContainerState extends State<HomeContainer> {
                       Text("Giá : ${formatPrice(product.price ?? 0)} đ",
                           style: TextStyle(fontSize: 12)),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          bloc.dispatch(AddToCartEvent(productId: product.sId.toString()));
+                        },
                         style: ButtonStyle(
                             backgroundColor:
                             MaterialStateProperty.resolveWith((states) {
@@ -132,6 +184,32 @@ class _HomeContainerState extends State<HomeContainer> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget? _showAlertDialog(BuildContext context,{required String title,required String content}) {
+
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () { },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("My title"),
+      content: Text("This is my message."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
