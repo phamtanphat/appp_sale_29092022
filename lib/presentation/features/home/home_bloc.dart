@@ -4,50 +4,87 @@ import 'package:appp_sale_29092022/common/bases/base_bloc.dart';
 import 'package:appp_sale_29092022/common/bases/base_event.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/dto/app_resource.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/dto/product_dto.dart';
-import 'package:appp_sale_29092022/data/model/product.dart';
+import 'package:appp_sale_29092022/data/model/cart_result_model.dart';
+import 'package:appp_sale_29092022/data/model/result.dart';
 import 'package:appp_sale_29092022/data/repositories/product_repository.dart';
 import 'package:appp_sale_29092022/presentation/features/home/home_event.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomeBloc extends BaseBloc {
-  StreamController<List<Product>> _listProductsController = StreamController();
-  Stream<List<Product>> get products => _listProductsController.stream;
 
-  late ProductRepository _productRepository;
+  ProductRepository _repo = ProductRepository();
+  StreamController<List<Data>> _streamController = StreamController<List<Data>>();
+  StreamController<int> _streamProductCartController = StreamController<int>();
+  StreamController<String> _streamAddToCartController = StreamController<String>();
+  Stream<List<Data>> get getStream => _streamController.stream;
+  Stream<int> get getCartStream => _streamProductCartController.stream;
+  Stream<String> get getStatusAddToCart => _streamAddToCartController.stream;
 
-  void updateProductRepo(ProductRepository productRepository) {
-    _productRepository = productRepository;
+  HomeBloc(){
+    ProductRepository repo;
+    repo = _repo;
   }
-
 
   @override
   void dispatch(BaseEvent event) {
-    switch (event.runtimeType) {
+    // TODO: implement dispatch
+    switch(event.runtimeType){
       case FetchProductEvent:
         _executeGetProducts(event as FetchProductEvent);
         break;
+      case LoadCartOnAppbar:
+        _getCartOnAppbar();
+        break;
+      case AddToCartEvent:
+        _addToCart(event as AddToCartEvent);
     }
   }
 
   void _executeGetProducts(FetchProductEvent event) async{
-    loadingSink.add(true);
-    try {
-      AppResource<List<ProductDTO>> resourceProductDTO = await _productRepository.getProducts();
-      if (resourceProductDTO.data == null) return;
-      List<ProductDTO> listProductDTO = resourceProductDTO.data ?? List.empty();
-      List<Product> listProduct = listProductDTO.map((e){
-        return Product(e.id, e.name, e.address, e.price, e.img, e.quantity, e.gallery);
-      }).toList();
-      _listProductsController.sink.add(listProduct);
-      loadingSink.add(false);
-    } catch (e) {
-      messageSink.add(e.toString());
-      loadingSink.add(false);
+    var products = _repo.getProducts();
+    products.then((res) {
+      _streamController.sink.add(res);
+    },
+    onError: (err) => print("Chay vao ham err bloc ${err.toString()}"));
+  }
+
+  void _getCartOnAppbar() async{
+    var products = _repo.getCartProducts();
+
+    products.then((res) {
+      List<Products> items = res;
+      int count=0;
+      if(items.isNotEmpty){
+        for(var i=0; i<items.length;i++){
+          count+=items[i].quantity ?? 0;
+        }
+      }
+      _streamProductCartController.sink.add(count);
+    },
+        onError: (err) => print("Chay vao ham err bloc ${err.toString()}"));
+  }
+
+  void _addToCart(AddToCartEvent event){
+    if(event.productId.isEmpty){
+      _streamAddToCartController.sink.addError("error");
     }
+    _streamAddToCartController.sink.add("adding");
+    _repo.addToCart(event.productId).then((res) {
+      _streamAddToCartController.sink.add(res);
+      dispatch(LoadCartOnAppbar());
+    }
+        , onError:  (err) => _streamAddToCartController.sink.addError(err));
   }
 
   @override
   void dispose() {
+    // TODO: implement dispose
     super.dispose();
-    _listProductsController.close();
+    _streamController.close();
+    _streamProductCartController.close();
+    _streamAddToCartController.close();
   }
+
+
+
 }
