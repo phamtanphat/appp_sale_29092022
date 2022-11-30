@@ -8,4 +8,5 @@ class AppResponse<T> {
     message = json['message'];
     data = parseModel(json['data']);
   }
+
 }
