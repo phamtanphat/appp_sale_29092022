@@ -6,4 +6,5 @@ class VariableConstant {
   static final String SPLASH = "splash";
   static final String HOME_PAGE = "home";
   static final String CART_PAGE = "cart";
+  static final String ORDER_HISTORY_PAGE = "order";
 }

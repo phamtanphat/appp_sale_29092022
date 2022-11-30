@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appp_sale_29092022/common/bases/base_bloc.dart';
 import 'package:appp_sale_29092022/common/bases/base_event.dart';
 import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
+import 'package:appp_sale_29092022/common/utils/extension.dart';
 import 'package:appp_sale_29092022/data/datasources/local/cache/app_cache.dart';
 import '../../../data/datasources/remote/dto/app_resource.dart';
 import '../../../data/datasources/remote/dto/cart_dto.dart';
@@ -15,7 +16,7 @@ import 'cart_event.dart';
 class CartBloc extends BaseBloc{
   late CartRespository _cartRespository;
   StreamController<Cart> _streamController = StreamController.broadcast();
-  late Cart _cartModel;
+  Cart? _cartModel ;
 
   void updateRepository(CartRespository cartRespository){
     _cartRespository = cartRespository;
@@ -35,6 +36,9 @@ class CartBloc extends BaseBloc{
         break;
       case DecreaseCartItemEvent:
         handleDecreaseCartItemEvent(event as DecreaseCartItemEvent);
+        break;
+      case ConfirmCartEvent:
+        handleConfirmCartEvent(event as ConfirmCartEvent);
         break;
       default:
         break;
@@ -75,8 +79,8 @@ class CartBloc extends BaseBloc{
         }
       }
       _cartModel = Cart(cartDTO.id, listProduct, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
-      AppCache.setString(key: VariableConstant.CART_ID,value: _cartModel.id.toString());
-      _streamController.add(_cartModel);
+      AppCache.setString(key: VariableConstant.CART_ID,value: _cartModel!.id.toString());
+      _streamController.add(_cartModel!);
     } catch (e) {
       print(e.toString());
     }
@@ -85,20 +89,28 @@ class CartBloc extends BaseBloc{
 
   int getQuantityFromIdProduct(String id){
     int quantity = 0;
-    for(int i = 0; i<_cartModel.products.length;i++){
-      if(_cartModel.products[i].id == id){
-        quantity = _cartModel.products[i].quantity;
+    if(_cartModel == null) {
+      return 0;
+    }
+
+    for(int i = 0; i<_cartModel!.products.length;i++){
+      if(_cartModel!.products[i].id == id){
+        quantity = _cartModel!.products[i].quantity;
       }
     }
     return quantity;
   }
 
   void handleIncreaseCartItemEvent(IncreaseCartItemEvent event) async{
+
     loadingSink.add(true);
     try{
+      print("handleIncreaseCartItemEvent begin");
       int quantity = getQuantityFromIdProduct(event.idProduct);
+
       AppResource<CartDTO> resourceDTO;
       if(quantity == 0){
+        print("handleIncreaseCartItemEvent 112");
         quantity = event.quantity;
         resourceDTO = await _cartRespository.addToCart(event.idProduct);
       }else{
@@ -130,7 +142,7 @@ class CartBloc extends BaseBloc{
       }
       _cartModel = Cart(cartDTO.id, listProduct, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
       AppCache.setString(key: VariableConstant.CART_ID,value: cartDTO.id.toString());
-      _streamController.add(_cartModel);
+      _streamController.add(_cartModel!);
     }catch(e){
       print(e.toString());
     }
@@ -167,9 +179,22 @@ class CartBloc extends BaseBloc{
       }
       _cartModel = Cart(cartDTO.id, listProduct, cartDTO.idUser, cartDTO.price, cartDTO.dateCreated);
       AppCache.setString(key: VariableConstant.CART_ID,value: cartDTO.id.toString());
-      _streamController.add(_cartModel);
+      _streamController.add(_cartModel!);
     }catch(e){
       print(e.toString());
+    }
+    loadingSink.add(false);
+  }
+
+  void handleConfirmCartEvent(ConfirmCartEvent event) async{
+    loadingSink.add(true);
+    try{
+      String resource = await _cartRespository.confirmCart();
+      progressSink.add(ConfirmCartSuccessEvent(resource));
+      _cartModel!.clear();
+      _streamController.add(_cartModel!);
+    }catch(e){
+      progressSink.add(ConfirmCartFailedEvent(e.toString()));
     }
     loadingSink.add(false);
   }

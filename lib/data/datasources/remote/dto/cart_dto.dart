@@ -20,4 +20,8 @@ class CartDTO {
   static CartDTO parser (Map<String, dynamic> json){
     return CartDTO.fromJson(json);
   }
+
+  static List<CartDTO> parserListCartDTO (List<dynamic> json){
+    return (json as List).map((e) => CartDTO.fromJson(e)).toList();
+  }
 }

@@ -7,6 +7,7 @@ import '../../../common/bases/base_widget.dart';
 import '../../../common/constants/api_constant.dart';
 import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
+import '../../../common/widgets/progress_listener_widget.dart';
 import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/repositories/cart_respository.dart';
 import 'cart_bloc.dart';
@@ -106,7 +107,18 @@ class _CartContainerState extends State<_CartContainer> {
               Expanded(child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 child: _summaryCartWidget(),
-              ))
+              )),
+              ProgressListenerWidget<CartBloc>(child: Container(), callback: (event){
+                switch(event.runtimeType){
+                  case ConfirmCartSuccessEvent:
+                    Navigator.pop(context);
+                    showSnackBar(context, (event as ConfirmCartSuccessEvent).msg);
+                    break;
+                  case ConfirmCartFailedEvent:
+                    showSnackBar(context, (event as ConfirmCartFailedEvent).msg);
+                    break;
+                }
+              })
             ],
           ),
         ));
@@ -226,7 +238,9 @@ class _CartContainerState extends State<_CartContainer> {
         SizedBox(
           width: 100,
           child: ElevatedButton(
-            onPressed: (){},
+            onPressed: (){
+              _cartBloc.eventSink.add(ConfirmCartEvent());
+            },
             child: Text("Order", style:  TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: Colors.black)),
           ),
         )

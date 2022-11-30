@@ -33,32 +33,62 @@ class ApiRequest {
 
   Future getCart() {
     return _dio.get(ApiConstant.CART,
-        options: Options(headers: {
-          "authorization": "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
-        }));
+        options: Options(
+            validateStatus: (status) {
+              return status! <= 500;
+            },
+            headers: {
+              "authorization":
+                  "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
+            }));
   }
 
-  Future updateCart(String idProduct, int quantity){
+  Future updateCart(String idProduct, int quantity) {
     return _dio.post(ApiConstant.UPDATE_CART,
         data: {
           "id_product": idProduct,
           "id_cart": AppCache.getString(VariableConstant.CART_ID),
           "quantity": quantity
         },
-        options: Options(
-            headers: {
-      "authorization": "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
-    }));
-  }
-
-  Future addToCart(String idProduct){
-    return _dio.post(ApiConstant.UPDATE_CART,
-        data: {
-          "id_product": idProduct
-        },
         options: Options(headers: {
-          "authorization": "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
+          "authorization":
+              "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
         }));
   }
 
+  Future addToCart(String idProduct) {
+    return _dio.post(ApiConstant.ADD_CART,
+        data: {"id_product": idProduct},
+        options: Options(
+            validateStatus: (status) {
+              return status! <= 500;
+            },
+            headers: {
+              "authorization":
+                  "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
+            }));
+  }
+
+  Future confirmCart() {
+    return _dio.post(ApiConstant.CONFiRM_CART,
+        data: {"id_cart": AppCache.getString(VariableConstant.CART_ID),
+          "status" : false},
+        options: Options(
+            headers: {
+              "authorization":
+                  "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
+            }));
+  }
+
+  Future orderHistory(){
+    return _dio.post(ApiConstant.ORDER_HISTORY,
+        options: Options(
+            validateStatus: (status) {
+              return status! <= 500;
+            },
+            headers: {
+              "authorization":
+              "Bearer ${AppCache.getString(VariableConstant.TOKEN)}",
+            }));
+  }
 }

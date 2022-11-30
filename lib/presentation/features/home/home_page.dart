@@ -77,9 +77,11 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                        Navigator.pushNamed(context, VariableConstant.ORDER_HISTORY_PAGE);
+                    },
                     icon: Icon(
-                      Icons.stars_rounded,
+                      Icons.history,
                       color: Colors.black,
                     )),
                 Consumer<CartBloc>(
@@ -179,7 +181,8 @@ class _HomePageContainerState extends State<_HomePageContainer> {
                           return ProductWidget(context, img, title, address, price,idProduct);
                         });
                   }),
-            ),
+            )
+
           ],
         ));
   }

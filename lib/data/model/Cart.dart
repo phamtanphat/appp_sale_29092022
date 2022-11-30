@@ -3,28 +3,33 @@ import 'Product.dart';
 class Cart {
   String id = "";
   List<Product> products = [];
-  String id_user = "";
+  String idUser = "";
   int price = 0;
-  String date_created = "";
+  String dateCreated = "";
 
-  Cart(String? id, List<Product>? products, String? id_user, int? price, String? data_created) {
+  Cart(String? id, List<Product>? products, String? iduser, int? price, String? datecreated) {
     this.id = id ?? "";
     this.products = products ?? [];
-    this.id_user = id_user ?? "";
+    this.idUser = iduser ?? "";
     this.price = price ?? 0;
-    this.date_created = date_created ?? "";
+    this.dateCreated = datecreated ?? "";
   }
 
-  void updateCart(String? id, List<Product>? products, String? id_user, int? price, String? data_created){
+  void updateCart(String? id, List<Product>? products, String? idUser, int? price, String? datacreated){
     this.id = id ?? "";
     this.products = products ?? [];
-    this.id_user = id_user ?? "";
+    this.idUser = idUser ?? "";
     this.price = price ?? 0;
-    this.date_created = date_created ?? "";
+    this.dateCreated = datacreated ?? "";
   }
 
   @override
   String toString() {
-    return 'Cart{id: $id, products: $products, id_user: $id_user, price: $price, date_created: $date_created}';
+    return 'Cart{id: $id, date_created: $dateCreated ,products: $products, id_user: $idUser, price: $price }';
+  }
+  void clear(){
+    this.products.clear();
+    this.price = 0;
+    this.dateCreated = "";
   }
 }
