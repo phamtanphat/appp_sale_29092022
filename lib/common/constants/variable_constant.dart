@@ -7,4 +7,5 @@ class VariableConstant {
   static final String HOME_PAGE = "home";
   static final String CART_PAGE = "cart";
   static final String ORDER_HISTORY_PAGE = "order";
+  static final String ORDER_DETAIL_PAGE = "order-detail";
 }

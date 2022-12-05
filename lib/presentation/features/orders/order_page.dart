@@ -1,9 +1,11 @@
 import 'package:appp_sale_29092022/common/bases/base_widget.dart';
+import 'package:appp_sale_29092022/common/constants/variable_constant.dart';
 import 'package:appp_sale_29092022/common/utils/extension.dart';
 import 'package:appp_sale_29092022/data/datasources/remote/api_request.dart';
 import 'package:appp_sale_29092022/data/model/Product.dart';
 import 'package:appp_sale_29092022/data/repositories/order_repository.dart';
 import 'package:appp_sale_29092022/presentation/features/orders/order_bloc.dart';
+import 'package:appp_sale_29092022/presentation/features/orders/order_detail_page.dart';
 import 'package:appp_sale_29092022/presentation/features/orders/order_event.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +76,9 @@ class _OrderHistoryContainerState extends State<_OrderHistoryContainer> {
 
               itemCount: snapshot.data?.length ?? 0,
               itemBuilder: (context,index){
-                return _orderItemWidget(context,snapshot.data![index]);
+                return Container(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: _orderItemWidget(context,snapshot.data![index]));
               });
         },
       ),
@@ -91,7 +95,7 @@ class _OrderHistoryContainerState extends State<_OrderHistoryContainer> {
             borderRadius: BorderRadius.circular(20.0), //<-- SEE HERE
           ),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal:25,vertical: 5),
+          margin: EdgeInsets.symmetric(horizontal:25,vertical: 10),
           width:  MediaQuery.of(context).size.width*0.8,
           height: 100,
           child: Column(
@@ -105,7 +109,7 @@ class _OrderHistoryContainerState extends State<_OrderHistoryContainer> {
         ),
       ),
       onTap: (){
-
+        Navigator.pushNamed(context, VariableConstant.ORDER_DETAIL_PAGE,arguments: {"cart" :item});
       },
     );
   }
