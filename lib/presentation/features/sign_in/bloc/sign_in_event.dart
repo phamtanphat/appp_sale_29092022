@@ -1,6 +1,5 @@
 part of 'sign_in_bloc.dart';
 
-// thay SignIn = tên màn hình
 @immutable
 abstract class SignInEvent {}
 

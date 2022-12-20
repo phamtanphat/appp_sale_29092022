@@ -8,12 +8,9 @@ part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc() : super(const SignInState()) {
-    // mỗi 1 sự kiện thì thêm theo cú pháp này
-    // thay đổi SignInInit = tên sự kiện mới
     on<SignInInit>((event, emit) async {});
 
     on<OnTapButtonLogin>((event, emit) async {
-      // emit đẩy sự thay đổi ra lại UI để nó vẽ lại
       emit(state.copyWith(status: SignInStatus.loading));
       var response = await ApiRequest()
           .signIn(email: event.email, password: event.password);

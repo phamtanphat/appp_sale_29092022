@@ -8,7 +8,6 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // lấy nội dung ô nhập liệu
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
@@ -34,7 +33,6 @@ class SignInPage extends StatelessWidget {
                   body: Column(
                     children: [
                       Expanded(
-                        // fix bàn phím đẩy (bốp) layout: SingleChildScrollView (columnn hoặc row )
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -51,16 +49,9 @@ class SignInPage extends StatelessWidget {
                                   controller: emailController,
                                   decoration: InputDecoration(
                                     hintText: 'Email',
-                                    // có 2 loại phổ biến
-                                    // loại 1 : OutlineInputBorder (có khung xung quanh)
-                                    // loại 2 : UnderlineInputBorder ( khung viên chỉ có ở dưới)
                                     border: OutlineInputBorder(
-                                      // borderRadius: BorderRadius.all(
-                                      //   Radius.circular(4),
-                                      // ),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
-                                    // phủ màu ô nhập liệu , bật
                                     fillColor: Colors.grey.withOpacity(0.3),
                                     filled: true,
                                     prefixIcon: IconButton(
@@ -95,7 +86,6 @@ class SignInPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              //Wiget để nhận hành động click
                               GestureDetector(
                                 onTap: () {
                                   context.read<SignInBloc>().add(
@@ -148,7 +138,6 @@ class SignInPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                // UI vẽ lại widget bên dưới khi emit ra status = SignInStatus.loading
                 state.status == SignInStatus.loading
                     ? const Center(
                         child: CircularProgressIndicator(),

@@ -1,4 +1,3 @@
-import 'package:appp_sale_29092022/presentation/features/demo/demo_screen.dart';
 import 'package:appp_sale_29092022/presentation/features/home/home_page.dart';
 import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_page.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(),
       routes: {
         "/": (context) => const SignInPage(),
-        // "/": (context) => const DemoScreen(),
         "/home": (context) => const HomePage(),
       },
       initialRoute: '/',

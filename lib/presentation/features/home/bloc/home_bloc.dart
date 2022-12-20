@@ -1,14 +1,13 @@
 import 'package:appp_sale_29092022/data/datasources/api_request.dart';
 import 'package:appp_sale_29092022/data/model/card_response.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(HomeState()) {
+  HomeBloc() : super(const HomeState()) {
     on<HomeInit>((event, emit) async {
       try {
         final response = await ApiRequest().getProducts();

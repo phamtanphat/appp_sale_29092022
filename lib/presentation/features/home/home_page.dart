@@ -7,24 +7,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List list = [
-      "1",
-      "2",
-      "3",
-      "1",
-      "2",
-      "3",
-      "1",
-      "aaaaaaaaaaaaa",
-      "3",
-      "1",
-      "2",
-      "3",
-      "1",
-      "2",
-      "3",
-    ];
-
     return BlocProvider(
       create: (context) => HomeBloc()..add(HomeInit()),
       child: BlocBuilder<HomeBloc, HomeState>(
@@ -79,7 +61,7 @@ class HomePage extends StatelessWidget {
                           //image
                           Expanded(
                             flex: 9,
-                            child: Container(
+                            child: SizedBox(
                               height: 110,
                               child: Image.network(
                                 'https://serverappsale.onrender.com/${item.gallery?.first}',
@@ -93,9 +75,8 @@ class HomePage extends StatelessWidget {
                           //content
                           Expanded(
                             flex: 11,
-                            child: Container(
+                            child: SizedBox(
                               height: 100,
-
                               //color: Colors.blue,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
