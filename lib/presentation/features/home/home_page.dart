@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
               actions: [
                 IconButton(
                   onPressed: () {
-                    debugPrint('shop aty');
+                    Navigator.of(context).pushNamed("/history");
                   },
                   icon: const Icon(
                     Icons.history_outlined,
