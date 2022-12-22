@@ -84,6 +84,10 @@ class ApiRequest {
           "id_cart": "62b73abce722e9050c46a837",
           "quantity": 9,
         },
+        options: Options(headers: {
+          "Authorization":
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjI0NDU1MDg5ODMsImRhdGEiOnsiX2lkIjoiNjM2YTQ0Y2M5NDA5YjUyZTVkNjNhODNjIiwiZW1haWwiOiJsdXViYW9uZ2FuMzExMEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRSZ3NMbElJWWFpN2piTUdaQWZjbjJPMUdabDZXSHgxMmoyNnl5UnkzbEJvbnFpak41SmtFMiIsIm5hbWUiOiJCYW9CYW8iLCJwaG9uZSI6IjA3NzM2MDQzNDAiLCJ1c2VyR3JvdXAiOjAsInJlZ2lzdGVyRGF0ZSI6IjIwMjItMTEtMDhUMTI6MDA6MTIuMjA1WiIsIl9fdiI6MH0sImlhdCI6MTY2NzkwODk4M30.uOwHKNIzzyBY9ZZaNxqpY-REXH5ZChC6HETQzJLsQHg",
+        }),
       );
       print('$response');
       return response;
@@ -97,6 +101,11 @@ class ApiRequest {
     try {
       var response = await Dio().post(
         'https://serverappsale.onrender.com/order/history',
+        data: null,
+        options: Options(headers: {
+          "Authorization":
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjI0NDU1MDg5ODMsImRhdGEiOnsiX2lkIjoiNjM2YTQ0Y2M5NDA5YjUyZTVkNjNhODNjIiwiZW1haWwiOiJsdXViYW9uZ2FuMzExMEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRSZ3NMbElJWWFpN2piTUdaQWZjbjJPMUdabDZXSHgxMmoyNnl5UnkzbEJvbnFpak41SmtFMiIsIm5hbWUiOiJCYW9CYW8iLCJwaG9uZSI6IjA3NzM2MDQzNDAiLCJ1c2VyR3JvdXAiOjAsInJlZ2lzdGVyRGF0ZSI6IjIwMjItMTEtMDhUMTI6MDA6MTIuMjA1WiIsIl9fdiI6MH0sImlhdCI6MTY2NzkwODk4M30.uOwHKNIzzyBY9ZZaNxqpY-REXH5ZChC6HETQzJLsQHg",
+        }),
       );
       print('$response');
       return response;
@@ -114,6 +123,10 @@ class ApiRequest {
           "id_cart": "62b73abce722e9050c46a837",
           "status": false,
         },
+        options: Options(headers: {
+          "Authorization":
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjI0NDU1MDg5ODMsImRhdGEiOnsiX2lkIjoiNjM2YTQ0Y2M5NDA5YjUyZTVkNjNhODNjIiwiZW1haWwiOiJsdXViYW9uZ2FuMzExMEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRSZ3NMbElJWWFpN2piTUdaQWZjbjJPMUdabDZXSHgxMmoyNnl5UnkzbEJvbnFpak41SmtFMiIsIm5hbWUiOiJCYW9CYW8iLCJwaG9uZSI6IjA3NzM2MDQzNDAiLCJ1c2VyR3JvdXAiOjAsInJlZ2lzdGVyRGF0ZSI6IjIwMjItMTEtMDhUMTI6MDA6MTIuMjA1WiIsIl9fdiI6MH0sImlhdCI6MTY2NzkwODk4M30.uOwHKNIzzyBY9ZZaNxqpY-REXH5ZChC6HETQzJLsQHg",
+        }),
       );
       print('$response');
       return response;
@@ -125,11 +138,13 @@ class ApiRequest {
 
   Future<Response?> refreshToken() async {
     try {
-      var response = await Dio()
-          .post('https://serverappsale.onrender.com/user/refresh-token', data: {
-        "email": "luubaongan3110@gmail.com",
-        "password": "baobao1234",
-      });
+      var response = await Dio().post(
+        'https://serverappsale.onrender.com/user/refresh-token',
+        data: {
+          "email": "luubaongan3110@gmail.com",
+          "password": "baobao1234",
+        },
+      );
       print('$response');
       return response;
     } catch (e) {
@@ -143,7 +158,7 @@ class ApiRequest {
       var response = await Dio().get(
         'https://serverappsale.onrender.com/user/refresh-token',
       );
-      print('$response');
+      print('response: $response');
       return response;
     } catch (e) {
       debugPrint('$e');
