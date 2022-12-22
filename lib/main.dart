@@ -1,3 +1,4 @@
+import 'package:appp_sale_29092022/presentation/features/detail/detail_page.dart';
 import 'package:appp_sale_29092022/presentation/features/history/history_page.dart';
 import 'package:appp_sale_29092022/presentation/features/home/home_page.dart';
 import 'package:appp_sale_29092022/presentation/features/sign_in/sign_in_page.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         "/": (context) => const SignInPage(),
         "/home": (context) => const HomePage(),
         "/history": (context) => const HistoryPage(),
+        "/detail": (context) => const DetailPage(),
       },
       initialRoute: '/',
     );

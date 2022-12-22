@@ -30,47 +30,56 @@ class HistoryPage extends StatelessWidget {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 final item = state.listCart[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text('${item.dateCreated}'),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text("Tổng tiền:${item.price} VND "),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                            ],
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      "/detail",
+                      arguments: item.id,
+                    );
+                  },
+                  behavior: HitTestBehavior.translucent,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text('${item.dateCreated}'),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text("Tổng tiền:${item.price} VND "),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          //color: Colors.green,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(80),
-                          child: Image.network(
-                            'https://serverappsale.onrender.com/${item.products?.first.img}',
-                            fit: BoxFit.fill,
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            //color: Colors.green,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(80),
+                            child: Image.network(
+                              'https://serverappsale.onrender.com/${item.products?.first.img}',
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
