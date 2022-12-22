@@ -38,69 +38,76 @@ class DetailPage extends StatelessWidget {
               backgroundColor: Colors.white,
               elevation: 0,
             ),
-            body: Column(children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: listProduct.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final item = listProduct[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            height: 100,
-                            child: Image.network(
-                              'https://serverappsale.onrender.com/${item.img}',
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
+            body: listProduct.isNotEmpty
+                ? Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: listProduct.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final item = listProduct[index];
+                            return Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Row(
                                 children: [
-                                  Text("${item.name}"),
-                                  const SizedBox(
-                                    height: 10,
+                                  SizedBox(
+                                    width: 150,
+                                    height: 100,
+                                    child: Image.network(
+                                      'https://serverappsale.onrender.com/${item.img}',
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
-                                  Text("Giá tiền: ${item.price} VND"),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text("Số lượng: ${item.quantity}"),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${item.name}"),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text("Giá tiền: ${item.price} VND"),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text("Số lượng: ${item.quantity}"),
+                                        ],
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
+                            );
+                          },
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          const Text("Tổng tiền của đơn hàng"),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "$total VND",
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 20,
                             ),
-                          )
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                         ],
                       ),
-                    );
-                  },
-                ),
-              ),
-              Column(
-                children: [
-                  const Text("Tổng tiền của đơn hàng"),
-                  const SizedBox(
-                    height: 10,
+                    ],
+                  )
+                : const Center(
+                    child: Text("Đơn hàng hiện tại đang trống"),
                   ),
-                  Text(
-                    "$total VND",
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontSize: 20,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-            ]),
           );
         },
       ),
