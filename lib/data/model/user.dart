@@ -32,13 +32,13 @@ class UserResponse {
   String toRawJson() => json.encode(toJson());
 
   factory UserResponse.fromJson(Map<String, dynamic> json) => UserResponse(
-        result: json["result"] == null ? null : json["result"],
+        result: json["result"] == null ? null : json["result"]!,
         data: json["data"] == null ? null : UserModel.fromJson(json["data"]),
-        message: json["message"] == null ? null : json["message"],
+        message: json["message"] == null ? null : json["message"]!,
       );
 
   Map<String, dynamic> toJson() => {
-        "result": result == null ? null : result,
+        "result": result == null ? null : result!,
         "data": data == null ? null : data!.toJson(),
         "message": message == null ? null : message!,
       };
@@ -84,23 +84,23 @@ class UserModel {
   String toRawJson() => json.encode(toJson());
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        email: json["email"] == null ? null : json["email"],
-        name: json["name"] == null ? null : json["name"],
-        phone: json["phone"] == null ? null : json["phone"],
-        userGroup: json["userGroup"] == null ? null : json["userGroup"],
+        email: json["email"] == null ? null : json["email"]!,
+        name: json["name"] == null ? null : json["name"]!,
+        phone: json["phone"] == null ? null : json["phone"]!,
+        userGroup: json["userGroup"] == null ? null : json["userGroup"]!,
         registerDate: json["registerDate"] == null
             ? null
             : DateTime.parse(json["registerDate"]),
-        token: json["token"] == null ? null : json["token"],
+        token: json["token"] == null ? null : json["token"]!,
       );
 
   Map<String, dynamic> toJson() => {
-        "email": email == null ? null : email,
-        "name": name == null ? null : name,
-        "phone": phone == null ? null : phone,
-        "userGroup": userGroup == null ? null : userGroup,
+        "email": email == null ? null : email!,
+        "name": name == null ? null : name!,
+        "phone": phone == null ? null : phone!,
+        "userGroup": userGroup == null ? null : userGroup!,
         "registerDate":
             registerDate == null ? null : registerDate!.toIso8601String(),
-        "token": token == null ? null : token,
+        "token": token == null ? null : token!,
       };
 }

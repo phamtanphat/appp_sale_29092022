@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    debugPrint('shop aty');
+                    Navigator.of(context).pushNamed("/cart");
                   },
                   icon: const Icon(
                     Icons.shopping_cart,

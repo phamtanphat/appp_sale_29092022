@@ -75,14 +75,18 @@ class ApiRequest {
     return null;
   }
 
-  Future<Response?> updateCart() async {
+  Future<Response?> updateCart({
+    required String idTransaction,
+    required String idProduct,
+    required int quantity,
+  }) async {
     try {
       var response = await Dio().post(
         'https://serverappsale.onrender.com/cart/update',
         data: {
-          "id_product": "62b72b165e4e6e6e3c6a81e6",
-          "id_cart": "62b73abce722e9050c46a837",
-          "quantity": 9,
+          "id_product": idTransaction,
+          "id_cart": idProduct,
+          "quantity": quantity,
         },
         options: Options(headers: {
           "Authorization":
@@ -115,13 +119,13 @@ class ApiRequest {
     return null;
   }
 
-  Future<Response?> cartConform() async {
+  Future<Response?> cartConform({required String idTransaction}) async {
     try {
       var response = await Dio().post(
         'https://serverappsale.onrender.com/cart/conform',
         data: {
-          "id_cart": "62b73abce722e9050c46a837",
-          "status": false,
+          "id_cart": idTransaction,
+          "status": true,
         },
         options: Options(headers: {
           "Authorization":
@@ -159,6 +163,23 @@ class ApiRequest {
         'https://serverappsale.onrender.com/user/refresh-token',
       );
       print('response: $response');
+      return response;
+    } catch (e) {
+      debugPrint('$e');
+    }
+    return null;
+  }
+
+  Future<Response?> getCart() async {
+    try {
+      var response = await Dio().get(
+        'https://serverappsale.onrender.com/cart',
+        options: Options(headers: {
+          "Authorization":
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjI0NDU1MDg5ODMsImRhdGEiOnsiX2lkIjoiNjM2YTQ0Y2M5NDA5YjUyZTVkNjNhODNjIiwiZW1haWwiOiJsdXViYW9uZ2FuMzExMEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRSZ3NMbElJWWFpN2piTUdaQWZjbjJPMUdabDZXSHgxMmoyNnl5UnkzbEJvbnFpak41SmtFMiIsIm5hbWUiOiJCYW9CYW8iLCJwaG9uZSI6IjA3NzM2MDQzNDAiLCJ1c2VyR3JvdXAiOjAsInJlZ2lzdGVyRGF0ZSI6IjIwMjItMTEtMDhUMTI6MDA6MTIuMjA1WiIsIl9fdiI6MH0sImlhdCI6MTY2NzkwODk4M30.uOwHKNIzzyBY9ZZaNxqpY-REXH5ZChC6HETQzJLsQHg",
+        }),
+      );
+      print('$response');
       return response;
     } catch (e) {
       debugPrint('$e');
